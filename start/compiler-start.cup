@@ -1,0 +1,121 @@
+package hassen.logo.compiler;
+import hassen.logo.factory.LogoFactory;
+import hassen.ast.Node;
+import hassen.ast.Symbol;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer("Error");
+		m.append (info.toString());
+        m.append(" : "+message);
+        System.err.println(m.toString());
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+    
+	private LogoContext context;
+    public void setContext (LogoContext context) {
+    	this.context = context;
+    }
+
+    public LogoContext getContext () {
+		return context;
+    }
+
+	public LogoFactory getFactory () {
+		return getContext().getFactory();
+	}
+
+:}
+
+terminal Double	NUMBER;
+terminal String		ID;
+terminal FRAME, HOME, UP, DOWN, RIGHT, LEFT, PEN, GOTO, MOVE, TURN, ON, OFF, CALL;
+terminal ADD, SUB, MULT, DIV,INK;
+terminal TERM, SEP, SET;
+terminal OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
+terminal UNARY_PLUS, UNARY_MINUS;
+terminal REPEAT,END,DEFINE;
+
+nonterminal			Commandes, Definitions, Definition;
+nonterminal Node    Instructions, Instruction;
+nonterminal Node    color,expr, expropt, params, params_opt, SymbolFunction, Declaration;
+
+precedence left ADD, SUB; 
+precedence left MULT, DIV; 
+precedence right UNARY_PLUS, UNARY_MINUS;
+
+Commandes	::= Definitions
+			;
+
+Definitions ::= 
+			| 	Definitions Definition
+			;
+
+Definition	::= Instruction:inst TERM	{:	if (inst != null) getContext().addGlobalInstruction(inst); :}
+			| Declaration:dc {:if(dc!=null) getContext().addLocalSymbol(dc); :}
+			;
+
+Instruction ::=							{: RESULT = null; :}
+			| FRAME expr:x SEP expr:y	{: RESULT = getFactory().createTurtleFrame (x, y); :}
+			| HOME						{: RESULT = getFactory().createTurtleHome (); :}
+			| UP expropt:p				{: RESULT = getFactory().createTurtleUp (p); :}
+			| DOWN expropt:p			{: RESULT = getFactory().createTurtleDown (p); :}
+			| RIGHT expropt:p			{: RESULT = getFactory().createTurtleRight (p); :}
+			| LEFT expropt:p			{: RESULT = getFactory().createTurtleLeft (p); :}
+			| PEN OFF					{: RESULT = getFactory().createTurtleOff (); :}
+			| PEN ON					{: RESULT = getFactory().createTurtleOn (); :}
+			| GOTO expr:x SEP expr:y	{: RESULT = getFactory().createTurtleGo (x, y); :}
+			| MOVE expropt:d			{: RESULT = getFactory().createTurtleMove (d); :}
+			| TURN expr:a				{: RESULT = getFactory().createTurtleTurn (a); :}
+			| ID:id SET expr:v			{: RESULT = getFactory().createTurtleSet (id, v); :}
+			| INK color:c 		{: RESULT = getFactory().createTurtleInk (c); :}
+			| REPEAT expr:c Instructions:l END {: RESULT = getFactory().createTurtleLoop (c, l); :}
+			| CALL ID:n params_opt:l {: RESULT = getFactory().createTurtleCall (n,l); :}
+			;
+			
+Instructions::=  {: RESULT = getFactory().createNodeBloc(); :}
+			| Instructions:l Instruction:i TERM {: RESULT = l;if(i!= null) l.getChildren().add(i); :}
+			;
+expropt 	::=							{: RESULT = getFactory().createNodeConstantReal (1.0); :}
+			| expr:v					{: RESULT = v; :}
+			;
+			
+
+expr	::=	OPEN_PARENTHESIS expr:e CLOSE_PARENTHESIS	{: RESULT = e; :}
+			| expr:e1 ADD expr:e2		{: RESULT = getFactory().createNodeAdd (e1, e2); :}
+			| expr:e1 SUB expr:e2		{: RESULT = getFactory().createNodeSub (e1, e2); :}
+			| expr:e1 MULT expr:e2		{: RESULT = getFactory().createNodeMult (e1, e2); :}
+			| expr:e1 DIV expr:e2		{: RESULT = getFactory().createNodeDiv (e1, e2); :}
+			| ADD expr:e				{: RESULT = getFactory().createNodePlus (e); :} %prec UNARY_PLUS
+			| SUB expr:e				{: RESULT = getFactory().createNodeMinus (e); :} %prec UNARY_MINUS
+			| NUMBER:n					{: RESULT = getFactory().createNodeConstantReal (n.doubleValue()); :}
+			| ID:id						{: RESULT = getFactory().createNodeVariable (id); :}
+
+			;
+			
+color ::= expr:r SEP expr:g SEP expr:b {: RESULT = 
+getFactory().createNodeAdd (
+	getFactory().createNodeAdd (
+		getFactory().createNodeMult (r, getFactory().createNodeConstantReal(65536)),
+		getFactory().createNodeMult (g, getFactory().createNodeConstantReal(256)))
+		,b); :}
+		| expr:v {: RESULT = v; :}
+		;
+
+params_opt ::=	{: RESULT = null; :}
+			| params:l {: RESULT = l; :}
+			;
+
+params	::= expr:i {: RESULT = getFactory().createNodeBloc(); if(i!= null) RESULT.getChildren().add(i);:}
+		| params:l SEP expr:i {: RESULT = l;if(i!= null) l.getChildren().add(i); :}
+		;
+		
+Declaration ::= DEFINE ID:n Instructions:l END {: RESULT = getFactory().createTurtleFunction(n);
+RESULT = setCode(l); :}
+;
+
+

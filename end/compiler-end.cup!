@@ -1,0 +1,102 @@
+package hassen.logo.compiler;
+import hassen.logo.factory.LogoFactory;
+import hassen.ast.Node;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer("Error");
+		m.append (info.toString());
+        m.append(" : "+message);
+        System.err.println(m.toString());
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+    
+	private LogoContext context;
+    public void setContext (LogoContext context) {
+    	this.context = context;
+    }
+
+    public LogoContext getContext () {
+		return context;
+    }
+
+	public LogoFactory getFactory () {
+		return getContext().getFactory();
+	}
+
+:}
+
+terminal Double	NUMBER;
+terminal String		ID, TEXT;
+terminal FRAME, HOME, UP, DOWN, RIGHT, LEFT, PEN, GOTO, MOVE, TURN, ON, OFF, PLOT, INK;
+terminal REPEAT, TIMES;
+terminal ADD, SUB, MULT, DIV;
+terminal TERM, SEP, SET;
+terminal OPEN_PARENTHESIS, CLOSE_PARENTHESIS, OPEN_BRACE, CLOSE_BRACE;
+terminal UNARY_PLUS, UNARY_MINUS;
+
+nonterminal 	     Commandes, Definitions, Definition;
+nonterminal Node    Instructions, Instruction;
+nonterminal Node    expr, expropt;
+
+precedence left ADD, SUB; 
+precedence left MULT, DIV; 
+precedence right UNARY_PLUS, UNARY_MINUS;
+
+Commandes	::= Definitions
+			;
+
+Definitions ::= 
+			| 	Definitions Definition
+			;
+
+Definition	::= Instruction:inst TERM	{:	if (inst != null) getContext().addGlobalInstruction(inst); :}
+			;
+
+Instruction ::=							{: RESULT = null; :}
+			| FRAME expr:x SEP expr:y	{: RESULT = getFactory().createTurtleFrame (x, y); :}
+			| HOME						{: RESULT = getFactory().createTurtleHome (); :}
+			| UP expropt:p				{: RESULT = getFactory().createTurtleUp (p); :}
+			| DOWN expropt:p			{: RESULT = getFactory().createTurtleDown (p); :}
+			| RIGHT expropt:p			{: RESULT = getFactory().createTurtleRight (p); :}
+			| LEFT expropt:p			{: RESULT = getFactory().createTurtleLeft (p); :}
+			| PEN OFF					{: RESULT = getFactory().createTurtleOff (); :}
+			| PEN ON					{: RESULT = getFactory().createTurtleOn (); :}
+			| GOTO expr:x SEP expr:y	{: RESULT = getFactory().createTurtleGo (x, y); :}
+			| MOVE expropt:d			{: RESULT = getFactory().createTurtleMove (d); :}
+			| TURN expr:a				{: RESULT = getFactory().createTurtleTurn (a); :}
+			| PLOT expr:t				{: RESULT = getFactory().createTurtlePlot (t); :}
+			| INK expr:i				{: RESULT = getFactory().createTurtleInk (i); :}
+			| ID:id SET expr:v			{: RESULT = getFactory().createTurtleSet (id, v); :}
+			| OPEN_BRACE Instructions:i CLOSE_BRACE {: RESULT = i; :}
+			| REPEAT expr:count TIMES Instruction:inst
+										{: RESULT = getFactory().createTurtleLoop (count, inst); :}
+			;
+
+Instructions ::=						{: RESULT = getFactory().createNodeBloc (); :}
+			 | Instructions:bloc Instruction:inst TERM
+			 							{:
+			 								RESULT = bloc;
+			 								if (inst != null) bloc.getChildren().add (inst);
+			 							:}
+			;
+
+expropt 	::=							{: RESULT = getFactory().createNodeConstantReal (1.0); :}
+			| expr:v					{: RESULT = v; :}
+			;
+
+expr	::=	OPEN_PARENTHESIS expr:e CLOSE_PARENTHESIS	{: RESULT = e; :}
+			| expr:e1 ADD expr:e2		{: RESULT = getFactory().createNodeAdd (e1, e2); :}
+			| expr:e1 SUB expr:e2		{: RESULT = getFactory().createNodeSub (e1, e2); :}
+			| expr:e1 MULT expr:e2		{: RESULT = getFactory().createNodeMult (e1, e2); :}
+			| expr:e1 DIV expr:e2		{: RESULT = getFactory().createNodeDiv (e1, e2); :}
+			| ADD expr:e				{: RESULT = getFactory().createNodePlus (e); :} %prec UNARY_PLUS
+			| SUB expr:e				{: RESULT = getFactory().createNodeMinus (e); :} %prec UNARY_MINUS
+			| NUMBER:n					{: RESULT = getFactory().createNodeConstantReal (n.doubleValue()); :}
+			| ID:id						{: RESULT = getFactory().createNodeVariable (id); :}
+			| TEXT:v					{: RESULT = getFactory().createNodeConstantString (v); :}
+			;

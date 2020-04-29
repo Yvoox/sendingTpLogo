@@ -1,0 +1,82 @@
+package hassen.logo.interpreter;
+import hassen.logo.ui.GraphicTurtle;
+import hassen.logo.interpreter.SymbolTable;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer("Error");
+		m.append (info.toString());
+        m.append(" : "+message);
+        System.err.println(m.toString());
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+    
+    private GraphicTurtle turtle;
+    private SymbolTable table = null;
+
+    public SymbolTable getTable () {
+		if (table == null) table = new SymbolTable ();
+		return table;
+    }
+
+    public GraphicTurtle getTurtle () {
+		return turtle;
+    }
+
+    public void setTurtle (GraphicTurtle turtle) {
+		this.turtle = turtle;
+    }
+
+:}
+
+terminal TERM, COMA;
+terminal MOVE, TURN, ON, OFF,HOME, GOTO;
+terminal EQUAL, ADD, SUB, MULT, DIV, USUB;
+terminal REPEAT,END;
+terminal Integer INTEGER;
+terminal String VARIABLE;
+
+nonterminal Object Commandes, Definitions, Definition, Instruction, Instructions;
+nonterminal Integer Expression;
+
+precedence left ADD,SUB;
+precedence left MULT, DIV;
+precedence right USUB;
+
+Commandes	::= Definitions
+			;
+			
+Definitions ::= 
+			| 	Definitions Definition
+			;
+
+Definition	::= Instruction TERM
+			;
+
+Instruction ::=
+			| HOME										{: getTurtle().home(); :}
+			| GOTO Expression:x COMA Expression:y		{: getTurtle().go(x,y); :}
+			| MOVE Expression:v							{: getTurtle().move(v); :}
+			| TURN Expression:v							{: getTurtle().turn(v); :}
+			| ON											{: getTurtle().penDown(); :}
+			| OFF										{: getTurtle().penUp(); :}
+			| VARIABLE:n EQUAL Expression:v				{: getTable().setValue(n,v); :}
+			| REPEAT Expression:c Instructions END
+			;
+			
+Instructions::= 									
+			| Instructions Instruction TERM
+			;
+			
+Expression ::= INTEGER:v									{: RESULT = v; :}
+			| VARIABLE:n									{: RESULT = getTable().getValue(n); :}
+			| Expression:l ADD Expression:r				{: RESULT = l+r; :}
+			| Expression:l SUB Expression:r				{: RESULT = l-r; :}
+			| Expression:l MULT Expression:r				{: RESULT = l*r; :}
+			| Expression:l DIV Expression:r				{: RESULT = l/r; :}
+			| SUB Expression:v							{: RESULT = -v; :} %prec USUB
+			;

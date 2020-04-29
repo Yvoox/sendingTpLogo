@@ -1,0 +1,20 @@
+d=30;
+g=d/3;
+
+ink 0,0,255;
+repeat 8
+	move d;
+	turn 45;
+end;
+
+home;
+pen off;
+goto 10,-10;
+pen on;
+
+ink 456434;
+repeat 8
+	move g;
+	turn 45;
+
+end;

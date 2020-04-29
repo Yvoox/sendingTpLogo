@@ -1,0 +1,734 @@
+===== STDERR =====
+
+===== STDOUT =====
+
+===== Terminals =====
+[0]EOF [1]error [2]TERM [3]COMA [4]MOVE 
+[5]TURN [6]ON [7]OFF [8]HOME [9]GOTO 
+[10]EQUAL [11]ADD [12]SUB [13]MULT [14]DIV 
+[15]USUB [16]REPEAT [17]END [18]INTEGER [19]VARIABLE 
+
+
+===== Non terminals =====
+[0]Commandes [1]Definitions [2]Definition [3]Instruction [4]Instructions 
+[5]Expression 
+
+===== Productions =====
+[0] Commandes ::= Definitions 
+[1] $START ::= Commandes EOF 
+[2] Definitions ::= 
+[3] Definitions ::= Definitions Definition 
+[4] Definition ::= Instruction TERM 
+[5] Instruction ::= 
+[6] Instruction ::= HOME 
+[7] Instruction ::= GOTO Expression COMA Expression 
+[8] Instruction ::= MOVE Expression 
+[9] Instruction ::= TURN Expression 
+[10] Instruction ::= ON 
+[11] Instruction ::= OFF 
+[12] Instruction ::= VARIABLE EQUAL Expression 
+[13] Instruction ::= REPEAT Expression Instructions END 
+[14] Instructions ::= 
+[15] Instructions ::= Instructions Instruction TERM 
+[16] Expression ::= INTEGER 
+[17] Expression ::= VARIABLE 
+[18] Expression ::= Expression ADD Expression 
+[19] Expression ::= Expression SUB Expression 
+[20] Expression ::= Expression MULT Expression 
+[21] Expression ::= Expression DIV Expression 
+[22] Expression ::= SUB Expression 
+===== Viable Prefix Recognizer =====
+START lalr_state [0]: {
+  [Definitions ::= (*) , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+  [$START ::= (*) Commandes EOF , {EOF }]
+  [Definitions ::= (*) Definitions Definition , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+  [Commandes ::= (*) Definitions , {EOF }]
+}
+transition on Definitions to state [2]
+transition on Commandes to state [1]
+
+-------------------
+lalr_state [1]: {
+  [$START ::= Commandes (*) EOF , {EOF }]
+}
+transition on EOF to state [38]
+
+-------------------
+lalr_state [2]: {
+  [Instruction ::= (*) OFF , {TERM }]
+  [Instruction ::= (*) MOVE Expression , {TERM }]
+  [Instruction ::= (*) , {TERM }]
+  [Instruction ::= (*) REPEAT Expression Instructions END , {TERM }]
+  [Instruction ::= (*) ON , {TERM }]
+  [Instruction ::= (*) GOTO Expression COMA Expression , {TERM }]
+  [Definition ::= (*) Instruction TERM , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+  [Instruction ::= (*) VARIABLE EQUAL Expression , {TERM }]
+  [Instruction ::= (*) TURN Expression , {TERM }]
+  [Instruction ::= (*) HOME , {TERM }]
+  [Definitions ::= Definitions (*) Definition , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+  [Commandes ::= Definitions (*) , {EOF }]
+}
+transition on GOTO to state [12]
+transition on OFF to state [11]
+transition on TURN to state [10]
+transition on HOME to state [9]
+transition on VARIABLE to state [8]
+transition on Instruction to state [7]
+transition on MOVE to state [6]
+transition on ON to state [5]
+transition on REPEAT to state [4]
+transition on Definition to state [3]
+
+-------------------
+lalr_state [3]: {
+  [Definitions ::= Definitions Definition (*) , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+}
+
+-------------------
+lalr_state [4]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Instruction ::= REPEAT (*) Expression Instructions END , {TERM }]
+  [Expression ::= (*) Expression DIV Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [33]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [5]: {
+  [Instruction ::= ON (*) , {TERM }]
+}
+
+-------------------
+lalr_state [6]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) INTEGER , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) VARIABLE , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= MOVE (*) Expression , {TERM }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [32]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [7]: {
+  [Definition ::= Instruction (*) TERM , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+}
+transition on TERM to state [31]
+
+-------------------
+lalr_state [8]: {
+  [Instruction ::= VARIABLE (*) EQUAL Expression , {TERM }]
+}
+transition on EQUAL to state [29]
+
+-------------------
+lalr_state [9]: {
+  [Instruction ::= HOME (*) , {TERM }]
+}
+
+-------------------
+lalr_state [10]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) INTEGER , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= TURN (*) Expression , {TERM }]
+  [Expression ::= (*) Expression MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) VARIABLE , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [28]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [11]: {
+  [Instruction ::= OFF (*) , {TERM }]
+}
+
+-------------------
+lalr_state [12]: {
+  [Expression ::= (*) Expression SUB Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= (*) INTEGER , {COMA ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression DIV Expression , {COMA ADD SUB MULT DIV }]
+  [Instruction ::= GOTO (*) Expression COMA Expression , {TERM }]
+  [Expression ::= (*) Expression ADD Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression MULT Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= (*) VARIABLE , {COMA ADD SUB MULT DIV }]
+  [Expression ::= (*) SUB Expression , {COMA ADD SUB MULT DIV }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [15]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [13]: {
+  [Expression ::= INTEGER (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+
+-------------------
+lalr_state [14]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= SUB (*) Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [27]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [15]: {
+  [Instruction ::= GOTO Expression (*) COMA Expression , {TERM }]
+  [Expression ::= Expression (*) DIV Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) ADD Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) MULT Expression , {COMA ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) SUB Expression , {COMA ADD SUB MULT DIV }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+transition on COMA to state [17]
+
+-------------------
+lalr_state [16]: {
+  [Expression ::= VARIABLE (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+
+-------------------
+lalr_state [17]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) INTEGER , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= GOTO Expression COMA (*) Expression , {TERM }]
+  [Expression ::= (*) Expression DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) VARIABLE , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [26]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [18]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression SUB (*) Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [25]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [19]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression MULT (*) Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [24]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [20]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression ADD (*) Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [23]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [21]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) INTEGER , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression DIV (*) Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) Expression MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) VARIABLE , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [22]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [22]: {
+  [Expression ::= Expression DIV Expression (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [23]: {
+  [Expression ::= Expression ADD Expression (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [24]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression MULT Expression (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [25]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression SUB Expression (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [26]: {
+  [Instruction ::= GOTO Expression COMA Expression (*) , {TERM }]
+  [Expression ::= Expression (*) DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [27]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= SUB Expression (*) , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM COMA MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [28]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= TURN Expression (*) , {TERM }]
+  [Expression ::= Expression (*) MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [29]: {
+  [Expression ::= (*) Expression SUB Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) INTEGER , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) Expression ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= VARIABLE EQUAL (*) Expression , {TERM }]
+  [Expression ::= (*) Expression MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) VARIABLE , {TERM ADD SUB MULT DIV }]
+  [Expression ::= (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on VARIABLE to state [16]
+transition on Expression to state [30]
+transition on SUB to state [14]
+transition on INTEGER to state [13]
+
+-------------------
+lalr_state [30]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= VARIABLE EQUAL Expression (*) , {TERM }]
+  [Expression ::= Expression (*) ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [31]: {
+  [Definition ::= Instruction TERM (*) , {EOF TERM MOVE TURN ON OFF HOME GOTO REPEAT VARIABLE }]
+}
+
+-------------------
+lalr_state [32]: {
+  [Expression ::= Expression (*) DIV Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) ADD Expression , {TERM ADD SUB MULT DIV }]
+  [Expression ::= Expression (*) MULT Expression , {TERM ADD SUB MULT DIV }]
+  [Instruction ::= MOVE Expression (*) , {TERM }]
+  [Expression ::= Expression (*) SUB Expression , {TERM ADD SUB MULT DIV }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+
+-------------------
+lalr_state [33]: {
+  [Instruction ::= REPEAT Expression (*) Instructions END , {TERM }]
+  [Expression ::= Expression (*) DIV Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) ADD Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Instructions ::= (*) Instructions Instruction TERM , {TERM MOVE TURN ON OFF HOME GOTO REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) MULT Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+  [Instructions ::= (*) , {TERM MOVE TURN ON OFF HOME GOTO REPEAT END VARIABLE }]
+  [Expression ::= Expression (*) SUB Expression , {TERM MOVE TURN ON OFF HOME GOTO ADD SUB MULT DIV REPEAT END VARIABLE }]
+}
+transition on DIV to state [21]
+transition on ADD to state [20]
+transition on MULT to state [19]
+transition on SUB to state [18]
+transition on Instructions to state [34]
+
+-------------------
+lalr_state [34]: {
+  [Instruction ::= (*) OFF , {TERM }]
+  [Instruction ::= (*) MOVE Expression , {TERM }]
+  [Instruction ::= (*) , {TERM }]
+  [Instruction ::= REPEAT Expression Instructions (*) END , {TERM }]
+  [Instruction ::= (*) REPEAT Expression Instructions END , {TERM }]
+  [Instruction ::= (*) ON , {TERM }]
+  [Instruction ::= (*) GOTO Expression COMA Expression , {TERM }]
+  [Instructions ::= Instructions (*) Instruction TERM , {TERM MOVE TURN ON OFF HOME GOTO REPEAT END VARIABLE }]
+  [Instruction ::= (*) VARIABLE EQUAL Expression , {TERM }]
+  [Instruction ::= (*) TURN Expression , {TERM }]
+  [Instruction ::= (*) HOME , {TERM }]
+}
+transition on GOTO to state [12]
+transition on END to state [36]
+transition on OFF to state [11]
+transition on TURN to state [10]
+transition on HOME to state [9]
+transition on VARIABLE to state [8]
+transition on Instruction to state [35]
+transition on MOVE to state [6]
+transition on ON to state [5]
+transition on REPEAT to state [4]
+
+-------------------
+lalr_state [35]: {
+  [Instructions ::= Instructions Instruction (*) TERM , {TERM MOVE TURN ON OFF HOME GOTO REPEAT END VARIABLE }]
+}
+transition on TERM to state [37]
+
+-------------------
+lalr_state [36]: {
+  [Instruction ::= REPEAT Expression Instructions END (*) , {TERM }]
+}
+
+-------------------
+lalr_state [37]: {
+  [Instructions ::= Instructions Instruction TERM (*) , {TERM MOVE TURN ON OFF HOME GOTO REPEAT END VARIABLE }]
+}
+
+-------------------
+lalr_state [38]: {
+  [$START ::= Commandes EOF (*) , {EOF }]
+}
+
+-------------------
+-------- ACTION_TABLE --------
+From state #0
+ [term 0:REDUCE(with prod 2)] [term 2:REDUCE(with prod 2)]
+ [term 4:REDUCE(with prod 2)] [term 5:REDUCE(with prod 2)]
+ [term 6:REDUCE(with prod 2)] [term 7:REDUCE(with prod 2)]
+ [term 8:REDUCE(with prod 2)] [term 9:REDUCE(with prod 2)]
+ [term 16:REDUCE(with prod 2)] [term 19:REDUCE(with prod 2)]
+From state #1
+ [term 0:SHIFT(to state 38)]
+From state #2
+ [term 0:REDUCE(with prod 0)] [term 2:REDUCE(with prod 5)]
+ [term 4:SHIFT(to state 6)] [term 5:SHIFT(to state 10)]
+ [term 6:SHIFT(to state 5)] [term 7:SHIFT(to state 11)]
+ [term 8:SHIFT(to state 9)] [term 9:SHIFT(to state 12)]
+ [term 16:SHIFT(to state 4)] [term 19:SHIFT(to state 8)]
+From state #3
+ [term 0:REDUCE(with prod 3)] [term 2:REDUCE(with prod 3)]
+ [term 4:REDUCE(with prod 3)] [term 5:REDUCE(with prod 3)]
+ [term 6:REDUCE(with prod 3)] [term 7:REDUCE(with prod 3)]
+ [term 8:REDUCE(with prod 3)] [term 9:REDUCE(with prod 3)]
+ [term 16:REDUCE(with prod 3)] [term 19:REDUCE(with prod 3)]
+From state #4
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #5
+ [term 2:REDUCE(with prod 10)]
+From state #6
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #7
+ [term 2:SHIFT(to state 31)]
+From state #8
+ [term 10:SHIFT(to state 29)]
+From state #9
+ [term 2:REDUCE(with prod 6)]
+From state #10
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #11
+ [term 2:REDUCE(with prod 11)]
+From state #12
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #13
+ [term 2:REDUCE(with prod 16)] [term 3:REDUCE(with prod 16)]
+ [term 4:REDUCE(with prod 16)] [term 5:REDUCE(with prod 16)]
+ [term 6:REDUCE(with prod 16)] [term 7:REDUCE(with prod 16)]
+ [term 8:REDUCE(with prod 16)] [term 9:REDUCE(with prod 16)]
+ [term 11:REDUCE(with prod 16)] [term 12:REDUCE(with prod 16)]
+ [term 13:REDUCE(with prod 16)] [term 14:REDUCE(with prod 16)]
+ [term 16:REDUCE(with prod 16)] [term 17:REDUCE(with prod 16)]
+ [term 19:REDUCE(with prod 16)]
+From state #14
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #15
+ [term 3:SHIFT(to state 17)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)]
+From state #16
+ [term 2:REDUCE(with prod 17)] [term 3:REDUCE(with prod 17)]
+ [term 4:REDUCE(with prod 17)] [term 5:REDUCE(with prod 17)]
+ [term 6:REDUCE(with prod 17)] [term 7:REDUCE(with prod 17)]
+ [term 8:REDUCE(with prod 17)] [term 9:REDUCE(with prod 17)]
+ [term 11:REDUCE(with prod 17)] [term 12:REDUCE(with prod 17)]
+ [term 13:REDUCE(with prod 17)] [term 14:REDUCE(with prod 17)]
+ [term 16:REDUCE(with prod 17)] [term 17:REDUCE(with prod 17)]
+ [term 19:REDUCE(with prod 17)]
+From state #17
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #18
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #19
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #20
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #21
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #22
+ [term 2:REDUCE(with prod 21)] [term 3:REDUCE(with prod 21)]
+ [term 4:REDUCE(with prod 21)] [term 5:REDUCE(with prod 21)]
+ [term 6:REDUCE(with prod 21)] [term 7:REDUCE(with prod 21)]
+ [term 8:REDUCE(with prod 21)] [term 9:REDUCE(with prod 21)]
+ [term 11:REDUCE(with prod 21)] [term 12:REDUCE(with prod 21)]
+ [term 13:REDUCE(with prod 21)] [term 14:REDUCE(with prod 21)]
+ [term 16:REDUCE(with prod 21)] [term 17:REDUCE(with prod 21)]
+ [term 19:REDUCE(with prod 21)]
+From state #23
+ [term 2:REDUCE(with prod 18)] [term 3:REDUCE(with prod 18)]
+ [term 4:REDUCE(with prod 18)] [term 5:REDUCE(with prod 18)]
+ [term 6:REDUCE(with prod 18)] [term 7:REDUCE(with prod 18)]
+ [term 8:REDUCE(with prod 18)] [term 9:REDUCE(with prod 18)]
+ [term 11:REDUCE(with prod 18)] [term 12:REDUCE(with prod 18)]
+ [term 13:SHIFT(to state 19)] [term 14:SHIFT(to state 21)]
+ [term 16:REDUCE(with prod 18)] [term 17:REDUCE(with prod 18)]
+ [term 19:REDUCE(with prod 18)]
+From state #24
+ [term 2:REDUCE(with prod 20)] [term 3:REDUCE(with prod 20)]
+ [term 4:REDUCE(with prod 20)] [term 5:REDUCE(with prod 20)]
+ [term 6:REDUCE(with prod 20)] [term 7:REDUCE(with prod 20)]
+ [term 8:REDUCE(with prod 20)] [term 9:REDUCE(with prod 20)]
+ [term 11:REDUCE(with prod 20)] [term 12:REDUCE(with prod 20)]
+ [term 13:REDUCE(with prod 20)] [term 14:REDUCE(with prod 20)]
+ [term 16:REDUCE(with prod 20)] [term 17:REDUCE(with prod 20)]
+ [term 19:REDUCE(with prod 20)]
+From state #25
+ [term 2:REDUCE(with prod 19)] [term 3:REDUCE(with prod 19)]
+ [term 4:REDUCE(with prod 19)] [term 5:REDUCE(with prod 19)]
+ [term 6:REDUCE(with prod 19)] [term 7:REDUCE(with prod 19)]
+ [term 8:REDUCE(with prod 19)] [term 9:REDUCE(with prod 19)]
+ [term 11:REDUCE(with prod 19)] [term 12:REDUCE(with prod 19)]
+ [term 13:SHIFT(to state 19)] [term 14:SHIFT(to state 21)]
+ [term 16:REDUCE(with prod 19)] [term 17:REDUCE(with prod 19)]
+ [term 19:REDUCE(with prod 19)]
+From state #26
+ [term 2:REDUCE(with prod 7)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)]
+From state #27
+ [term 2:REDUCE(with prod 22)] [term 3:REDUCE(with prod 22)]
+ [term 4:REDUCE(with prod 22)] [term 5:REDUCE(with prod 22)]
+ [term 6:REDUCE(with prod 22)] [term 7:REDUCE(with prod 22)]
+ [term 8:REDUCE(with prod 22)] [term 9:REDUCE(with prod 22)]
+ [term 11:REDUCE(with prod 22)] [term 12:REDUCE(with prod 22)]
+ [term 13:REDUCE(with prod 22)] [term 14:REDUCE(with prod 22)]
+ [term 16:REDUCE(with prod 22)] [term 17:REDUCE(with prod 22)]
+ [term 19:REDUCE(with prod 22)]
+From state #28
+ [term 2:REDUCE(with prod 9)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)]
+From state #29
+ [term 12:SHIFT(to state 14)] [term 18:SHIFT(to state 13)]
+ [term 19:SHIFT(to state 16)]
+From state #30
+ [term 2:REDUCE(with prod 12)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)]
+From state #31
+ [term 0:REDUCE(with prod 4)] [term 2:REDUCE(with prod 4)]
+ [term 4:REDUCE(with prod 4)] [term 5:REDUCE(with prod 4)]
+ [term 6:REDUCE(with prod 4)] [term 7:REDUCE(with prod 4)]
+ [term 8:REDUCE(with prod 4)] [term 9:REDUCE(with prod 4)]
+ [term 16:REDUCE(with prod 4)] [term 19:REDUCE(with prod 4)]
+From state #32
+ [term 2:REDUCE(with prod 8)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)]
+From state #33
+ [term 2:REDUCE(with prod 14)] [term 4:REDUCE(with prod 14)]
+ [term 5:REDUCE(with prod 14)] [term 6:REDUCE(with prod 14)]
+ [term 7:REDUCE(with prod 14)] [term 8:REDUCE(with prod 14)]
+ [term 9:REDUCE(with prod 14)] [term 11:SHIFT(to state 20)]
+ [term 12:SHIFT(to state 18)] [term 13:SHIFT(to state 19)]
+ [term 14:SHIFT(to state 21)] [term 16:REDUCE(with prod 14)]
+ [term 17:REDUCE(with prod 14)] [term 19:REDUCE(with prod 14)]
+From state #34
+ [term 2:REDUCE(with prod 5)] [term 4:SHIFT(to state 6)]
+ [term 5:SHIFT(to state 10)] [term 6:SHIFT(to state 5)]
+ [term 7:SHIFT(to state 11)] [term 8:SHIFT(to state 9)]
+ [term 9:SHIFT(to state 12)] [term 16:SHIFT(to state 4)]
+ [term 17:SHIFT(to state 36)] [term 19:SHIFT(to state 8)]
+From state #35
+ [term 2:SHIFT(to state 37)]
+From state #36
+ [term 2:REDUCE(with prod 13)]
+From state #37
+ [term 2:REDUCE(with prod 15)] [term 4:REDUCE(with prod 15)]
+ [term 5:REDUCE(with prod 15)] [term 6:REDUCE(with prod 15)]
+ [term 7:REDUCE(with prod 15)] [term 8:REDUCE(with prod 15)]
+ [term 9:REDUCE(with prod 15)] [term 16:REDUCE(with prod 15)]
+ [term 17:REDUCE(with prod 15)] [term 19:REDUCE(with prod 15)]
+From state #38
+ [term 0:REDUCE(with prod 1)]
+------------------------------
+-------- REDUCE_TABLE --------
+From state #0
+ [non term 0->state 1] [non term 1->state 2]
+From state #1
+From state #2
+ [non term 2->state 3] [non term 3->state 7]
+From state #3
+From state #4
+ [non term 5->state 33]
+From state #5
+From state #6
+ [non term 5->state 32]
+From state #7
+From state #8
+From state #9
+From state #10
+ [non term 5->state 28]
+From state #11
+From state #12
+ [non term 5->state 15]
+From state #13
+From state #14
+ [non term 5->state 27]
+From state #15
+From state #16
+From state #17
+ [non term 5->state 26]
+From state #18
+ [non term 5->state 25]
+From state #19
+ [non term 5->state 24]
+From state #20
+ [non term 5->state 23]
+From state #21
+ [non term 5->state 22]
+From state #22
+From state #23
+From state #24
+From state #25
+From state #26
+From state #27
+From state #28
+From state #29
+ [non term 5->state 30]
+From state #30
+From state #31
+From state #32
+From state #33
+ [non term 4->state 34]
+From state #34
+ [non term 3->state 35]
+From state #35
+From state #36
+From state #37
+From state #38
+-----------------------------

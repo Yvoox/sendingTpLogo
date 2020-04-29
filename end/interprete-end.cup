@@ -1,0 +1,91 @@
+package hassen.logo.interpreter;
+import hassen.logo.ui.GraphicTurtle;
+import hassen.logo.interpreter.SymbolTable;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer("Error");
+		m.append (info.toString());
+        m.append(" : "+message);
+        System.err.println(m.toString());
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+    
+    private GraphicTurtle turtle;
+    private SymbolTable table = null;
+
+    public SymbolTable getTable () {
+		if (table == null) table = new SymbolTable ();
+		return table;
+    }
+
+    public GraphicTurtle getTurtle () {
+		return turtle;
+    }
+
+    public void setTurtle (GraphicTurtle turtle) {
+		this.turtle = turtle;
+    }
+
+:}
+
+terminal Integer	NUMBER;
+terminal String		ID, TEXT;
+terminal FRAME, HOME, UP, DOWN, RIGHT, LEFT, PEN, GOTO, MOVE, TURN, ON, OFF, PLOT, INK;
+terminal ADD, SUB, MULT, DIV, SET;
+terminal SEP, TERM;
+terminal OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
+terminal UNARY_PLUS, UNARY_MINUS;
+
+nonterminal Object     Commandes, Definitions, Definition, Instruction;
+nonterminal Integer    expr, expropt;
+
+precedence left ADD, SUB; 
+precedence left MULT, DIV; 
+precedence right UNARY_PLUS, UNARY_MINUS;
+
+Commandes	::= Definitions
+			;
+
+Definitions ::= 
+			| 	Definitions Definition
+			;
+
+Definition	::= Instruction TERM
+			;
+
+Instruction ::=
+			| FRAME expr:x SEP expr:y	{: getTurtle().frame   (x, y); :}
+			| HOME						{: getTurtle().home    (); :}
+			| UP expropt:p				{: getTurtle().up      (p); :}
+			| DOWN expropt:p			{: getTurtle().down    (p); :}
+			| RIGHT expropt:p			{: getTurtle().right   (p); :}
+			| LEFT expropt:p			{: getTurtle().left    (p); :}
+			| PEN OFF					{: getTurtle().penUp	(); :}
+			| PEN ON					{: getTurtle().penDown (); :}
+			| GOTO expr:x SEP expr:y	{: getTurtle().go      (x,y); :}
+			| MOVE expropt:d			{: getTurtle().move    (d); :}
+			| TURN expr:a				{: getTurtle().turn	(a); :}
+			| PLOT TEXT:t				{: getTurtle().plot	(t); :}
+			| INK expr:i				{: getTurtle().ink	(i); :}
+			| ID:id SET expr:v			{: getTable().setValue (id, v); :}
+			;
+
+expropt 	::=							{: RESULT = 1; :}
+			| expr:v					{: RESULT = v; :}
+			;
+
+expr	::=	OPEN_PARENTHESIS expr:e CLOSE_PARENTHESIS	{: RESULT = e; :}
+			| expr:e1 ADD expr:e2		{: RESULT = e1 + e2; :}
+			| expr:e1 SUB expr:e2		{: RESULT = e1 - e2; :}
+			| expr:e1 MULT expr:e2		{: RESULT = e1 * e2; :}
+			| expr:e1 DIV expr:e2		{: RESULT = e1 / e2; :}
+			| ADD expr:e				{: RESULT = e; :} %prec UNARY_PLUS
+			| SUB expr:e				{: RESULT = -e; :} %prec UNARY_MINUS
+			| NUMBER:n					{: RESULT = n; :}
+			| ID:id						{: RESULT = getTable().getValue (id); :}
+			;

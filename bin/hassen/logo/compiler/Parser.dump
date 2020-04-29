@@ -1,0 +1,1637 @@
+===== STDERR =====
+
+===== STDOUT =====
+
+===== Terminals =====
+[0]EOF [1]error [2]NUMBER [3]ID [4]FRAME 
+[5]HOME [6]UP [7]DOWN [8]RIGHT [9]LEFT 
+[10]PEN [11]GOTO [12]MOVE [13]TURN [14]ON 
+[15]OFF [16]CALL [17]ADD [18]SUB [19]MULT 
+[20]DIV [21]INK [22]TERM [23]SEP [24]SET 
+[25]OPEN_PARENTHESIS [26]CLOSE_PARENTHESIS [27]UNARY_PLUS [28]UNARY_MINUS [29]REPEAT 
+[30]END [31]DEFINE 
+
+===== Non terminals =====
+[0]Commandes [1]Definitions [2]Definition [3]Instructions [4]Instruction 
+[5]color [6]expr [7]expropt [8]params [9]params_opt 
+[10]SymbolFunction [11]Declaration 
+
+===== Productions =====
+[0] Commandes ::= Definitions 
+[1] $START ::= Commandes EOF 
+[2] Definitions ::= 
+[3] Definitions ::= Definitions Definition 
+[4] Definition ::= Instruction TERM 
+[5] Definition ::= Declaration 
+[6] Instruction ::= 
+[7] Instruction ::= FRAME expr SEP expr 
+[8] Instruction ::= HOME 
+[9] Instruction ::= UP expropt 
+[10] Instruction ::= DOWN expropt 
+[11] Instruction ::= RIGHT expropt 
+[12] Instruction ::= LEFT expropt 
+[13] Instruction ::= PEN OFF 
+[14] Instruction ::= PEN ON 
+[15] Instruction ::= GOTO expr SEP expr 
+[16] Instruction ::= MOVE expropt 
+[17] Instruction ::= TURN expr 
+[18] Instruction ::= ID SET expr 
+[19] Instruction ::= INK color 
+[20] Instruction ::= REPEAT expr Instructions END 
+[21] Instruction ::= CALL ID params_opt 
+[22] Instructions ::= 
+[23] Instructions ::= Instructions Instruction TERM 
+[24] expropt ::= 
+[25] expropt ::= expr 
+[26] expr ::= OPEN_PARENTHESIS expr CLOSE_PARENTHESIS 
+[27] expr ::= expr ADD expr 
+[28] expr ::= expr SUB expr 
+[29] expr ::= expr MULT expr 
+[30] expr ::= expr DIV expr 
+[31] expr ::= ADD expr 
+[32] expr ::= SUB expr 
+[33] expr ::= NUMBER 
+[34] expr ::= ID 
+[35] color ::= expr SEP expr SEP expr 
+[36] color ::= expr 
+[37] params_opt ::= 
+[38] params_opt ::= params 
+[39] params ::= expr 
+[40] params ::= params SEP expr 
+[41] Declaration ::= DEFINE ID Instructions END 
+===== Viable Prefix Recognizer =====
+START lalr_state [0]: {
+  [Definitions ::= (*) , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [$START ::= (*) Commandes EOF , {EOF }]
+  [Definitions ::= (*) Definitions Definition , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Commandes ::= (*) Definitions , {EOF }]
+}
+transition on Definitions to state [2]
+transition on Commandes to state [1]
+
+-------------------
+lalr_state [1]: {
+  [$START ::= Commandes (*) EOF , {EOF }]
+}
+transition on EOF to state [76]
+
+-------------------
+lalr_state [2]: {
+  [Definition ::= (*) Declaration , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Instruction ::= (*) DOWN expropt , {TERM }]
+  [Instruction ::= (*) GOTO expr SEP expr , {TERM }]
+  [Instruction ::= (*) REPEAT expr Instructions END , {TERM }]
+  [Definitions ::= Definitions (*) Definition , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Instruction ::= (*) HOME , {TERM }]
+  [Instruction ::= (*) PEN OFF , {TERM }]
+  [Instruction ::= (*) ID SET expr , {TERM }]
+  [Instruction ::= (*) , {TERM }]
+  [Instruction ::= (*) RIGHT expropt , {TERM }]
+  [Instruction ::= (*) MOVE expropt , {TERM }]
+  [Instruction ::= (*) CALL ID params_opt , {TERM }]
+  [Declaration ::= (*) DEFINE ID Instructions END , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Definition ::= (*) Instruction TERM , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Instruction ::= (*) UP expropt , {TERM }]
+  [Instruction ::= (*) PEN ON , {TERM }]
+  [Instruction ::= (*) INK color , {TERM }]
+  [Instruction ::= (*) FRAME expr SEP expr , {TERM }]
+  [Instruction ::= (*) LEFT expropt , {TERM }]
+  [Instruction ::= (*) TURN expr , {TERM }]
+  [Commandes ::= Definitions (*) , {EOF }]
+}
+transition on MOVE to state [20]
+transition on REPEAT to state [19]
+transition on DOWN to state [18]
+transition on TURN to state [17]
+transition on Definition to state [16]
+transition on LEFT to state [15]
+transition on RIGHT to state [14]
+transition on ID to state [13]
+transition on INK to state [12]
+transition on UP to state [11]
+transition on Declaration to state [10]
+transition on CALL to state [9]
+transition on GOTO to state [8]
+transition on HOME to state [7]
+transition on DEFINE to state [6]
+transition on FRAME to state [5]
+transition on PEN to state [4]
+transition on Instruction to state [3]
+
+-------------------
+lalr_state [3]: {
+  [Definition ::= Instruction (*) TERM , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+transition on TERM to state [75]
+
+-------------------
+lalr_state [4]: {
+  [Instruction ::= PEN (*) OFF , {TERM }]
+  [Instruction ::= PEN (*) ON , {TERM }]
+}
+transition on OFF to state [74]
+transition on ON to state [73]
+
+-------------------
+lalr_state [5]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV SEP }]
+  [Instruction ::= FRAME (*) expr SEP expr , {TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV SEP }]
+}
+transition on expr to state [70]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [6]: {
+  [Declaration ::= DEFINE (*) ID Instructions END , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+transition on ID to state [67]
+
+-------------------
+lalr_state [7]: {
+  [Instruction ::= HOME (*) , {TERM }]
+}
+
+-------------------
+lalr_state [8]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV SEP }]
+  [Instruction ::= GOTO (*) expr SEP expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV SEP }]
+}
+transition on expr to state [64]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [9]: {
+  [Instruction ::= CALL (*) ID params_opt , {TERM }]
+}
+transition on ID to state [58]
+
+-------------------
+lalr_state [10]: {
+  [Definition ::= Declaration (*) , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+
+-------------------
+lalr_state [11]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) expr , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) , {TERM }]
+  [Instruction ::= UP (*) expropt , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [27]
+transition on expropt to state [57]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [12]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [Instruction ::= INK (*) color , {TERM }]
+  [color ::= (*) expr , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [color ::= (*) expr SEP expr SEP expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM SEP }]
+}
+transition on expr to state [52]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on color to state [51]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [13]: {
+  [Instruction ::= ID (*) SET expr , {TERM }]
+}
+transition on SET to state [49]
+
+-------------------
+lalr_state [14]: {
+  [Instruction ::= RIGHT (*) expropt , {TERM }]
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) expr , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [27]
+transition on expropt to state [48]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [15]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) expr , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) , {TERM }]
+  [Instruction ::= LEFT (*) expropt , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [27]
+transition on expropt to state [47]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [16]: {
+  [Definitions ::= Definitions Definition (*) , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+
+-------------------
+lalr_state [17]: {
+  [Instruction ::= TURN (*) expr , {TERM }]
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [46]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [18]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) expr , {TERM }]
+  [Instruction ::= DOWN (*) expropt , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [27]
+transition on expropt to state [45]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [19]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [Instruction ::= REPEAT (*) expr Instructions END , {TERM }]
+}
+transition on expr to state [40]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [20]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) expr , {TERM }]
+  [Instruction ::= MOVE (*) expropt , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= (*) , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [27]
+transition on expropt to state [26]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [21]: {
+  [expr ::= ID (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+
+-------------------
+lalr_state [22]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= SUB (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [39]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [23]: {
+  [expr ::= NUMBER (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+
+-------------------
+lalr_state [24]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= ADD (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [38]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [25]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= OPEN_PARENTHESIS (*) expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+}
+transition on expr to state [36]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [26]: {
+  [Instruction ::= MOVE expropt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [27]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expropt ::= expr (*) , {TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [28]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr SUB (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [35]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [29]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr MULT (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [34]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [30]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr ADD (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [33]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [31]: {
+  [expr ::= (*) ID , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr DIV (*) expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) NUMBER , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) expr MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on expr to state [32]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [32]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr DIV expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [33]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr ADD expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [34]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr MULT expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [35]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr SUB expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [36]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= OPEN_PARENTHESIS expr (*) CLOSE_PARENTHESIS , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV CLOSE_PARENTHESIS }]
+}
+transition on DIV to state [31]
+transition on CLOSE_PARENTHESIS to state [37]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [37]: {
+  [expr ::= OPEN_PARENTHESIS expr CLOSE_PARENTHESIS (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+
+-------------------
+lalr_state [38]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= ADD expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [39]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= SUB expr (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM SEP CLOSE_PARENTHESIS REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [40]: {
+  [expr ::= expr (*) ADD expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [expr ::= expr (*) MULT expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [Instruction ::= REPEAT expr (*) Instructions END , {TERM }]
+  [Instructions ::= (*) Instructions Instruction TERM , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+  [expr ::= expr (*) SUB expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+  [Instructions ::= (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+  [expr ::= expr (*) DIV expr , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL ADD SUB MULT DIV INK TERM REPEAT END }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+transition on Instructions to state [41]
+
+-------------------
+lalr_state [41]: {
+  [Instruction ::= REPEAT expr Instructions (*) END , {TERM }]
+  [Instruction ::= (*) DOWN expropt , {TERM }]
+  [Instruction ::= (*) GOTO expr SEP expr , {TERM }]
+  [Instruction ::= (*) REPEAT expr Instructions END , {TERM }]
+  [Instruction ::= (*) HOME , {TERM }]
+  [Instruction ::= (*) PEN OFF , {TERM }]
+  [Instructions ::= Instructions (*) Instruction TERM , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+  [Instruction ::= (*) ID SET expr , {TERM }]
+  [Instruction ::= (*) , {TERM }]
+  [Instruction ::= (*) RIGHT expropt , {TERM }]
+  [Instruction ::= (*) MOVE expropt , {TERM }]
+  [Instruction ::= (*) CALL ID params_opt , {TERM }]
+  [Instruction ::= (*) UP expropt , {TERM }]
+  [Instruction ::= (*) PEN ON , {TERM }]
+  [Instruction ::= (*) INK color , {TERM }]
+  [Instruction ::= (*) FRAME expr SEP expr , {TERM }]
+  [Instruction ::= (*) LEFT expropt , {TERM }]
+  [Instruction ::= (*) TURN expr , {TERM }]
+}
+transition on PEN to state [4]
+transition on GOTO to state [8]
+transition on UP to state [11]
+transition on END to state [43]
+transition on CALL to state [9]
+transition on FRAME to state [5]
+transition on DOWN to state [18]
+transition on ID to state [13]
+transition on TURN to state [17]
+transition on HOME to state [7]
+transition on RIGHT to state [14]
+transition on INK to state [12]
+transition on Instruction to state [42]
+transition on MOVE to state [20]
+transition on LEFT to state [15]
+transition on REPEAT to state [19]
+
+-------------------
+lalr_state [42]: {
+  [Instructions ::= Instructions Instruction (*) TERM , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+}
+transition on TERM to state [44]
+
+-------------------
+lalr_state [43]: {
+  [Instruction ::= REPEAT expr Instructions END (*) , {TERM }]
+}
+
+-------------------
+lalr_state [44]: {
+  [Instructions ::= Instructions Instruction TERM (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+}
+
+-------------------
+lalr_state [45]: {
+  [Instruction ::= DOWN expropt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [46]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= TURN expr (*) , {TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [47]: {
+  [Instruction ::= LEFT expropt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [48]: {
+  [Instruction ::= RIGHT expropt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [49]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= ID SET (*) expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [50]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [50]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= ID SET expr (*) , {TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [51]: {
+  [Instruction ::= INK color (*) , {TERM }]
+}
+
+-------------------
+lalr_state [52]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [color ::= expr (*) SEP expr SEP expr , {TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [color ::= expr (*) , {TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+transition on SEP to state [53]
+
+-------------------
+lalr_state [53]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV SEP }]
+  [color ::= expr SEP (*) expr SEP expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV SEP }]
+}
+transition on expr to state [54]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [54]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [color ::= expr SEP expr (*) SEP expr , {TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+transition on SEP to state [55]
+
+-------------------
+lalr_state [55]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [color ::= expr SEP expr SEP (*) expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [56]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [56]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [color ::= expr SEP expr SEP expr (*) , {TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [57]: {
+  [Instruction ::= UP expropt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [58]: {
+  [params ::= (*) params SEP expr , {TERM SEP }]
+  [params_opt ::= (*) , {TERM }]
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [params ::= (*) expr , {TERM SEP }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [Instruction ::= CALL ID (*) params_opt , {TERM }]
+  [params_opt ::= (*) params , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM SEP }]
+}
+transition on params to state [61]
+transition on params_opt to state [60]
+transition on expr to state [59]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [59]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [params ::= expr (*) , {TERM SEP }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [60]: {
+  [Instruction ::= CALL ID params_opt (*) , {TERM }]
+}
+
+-------------------
+lalr_state [61]: {
+  [params_opt ::= params (*) , {TERM }]
+  [params ::= params (*) SEP expr , {TERM SEP }]
+}
+transition on SEP to state [62]
+
+-------------------
+lalr_state [62]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM SEP }]
+  [params ::= params SEP (*) expr , {TERM SEP }]
+}
+transition on expr to state [63]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [63]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM SEP }]
+  [params ::= params SEP expr (*) , {TERM SEP }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM SEP }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [64]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV SEP }]
+  [Instruction ::= GOTO expr (*) SEP expr , {TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+transition on SEP to state [65]
+
+-------------------
+lalr_state [65]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= GOTO expr SEP (*) expr , {TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [66]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [66]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= GOTO expr SEP expr (*) , {TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [67]: {
+  [Instructions ::= (*) Instructions Instruction TERM , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+  [Declaration ::= DEFINE ID (*) Instructions END , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Instructions ::= (*) , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+}
+transition on Instructions to state [68]
+
+-------------------
+lalr_state [68]: {
+  [Instruction ::= (*) DOWN expropt , {TERM }]
+  [Instruction ::= (*) GOTO expr SEP expr , {TERM }]
+  [Instruction ::= (*) REPEAT expr Instructions END , {TERM }]
+  [Instruction ::= (*) HOME , {TERM }]
+  [Instruction ::= (*) PEN OFF , {TERM }]
+  [Instructions ::= Instructions (*) Instruction TERM , {ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT END }]
+  [Instruction ::= (*) ID SET expr , {TERM }]
+  [Instruction ::= (*) , {TERM }]
+  [Instruction ::= (*) RIGHT expropt , {TERM }]
+  [Instruction ::= (*) MOVE expropt , {TERM }]
+  [Instruction ::= (*) CALL ID params_opt , {TERM }]
+  [Declaration ::= DEFINE ID Instructions (*) END , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+  [Instruction ::= (*) UP expropt , {TERM }]
+  [Instruction ::= (*) PEN ON , {TERM }]
+  [Instruction ::= (*) INK color , {TERM }]
+  [Instruction ::= (*) FRAME expr SEP expr , {TERM }]
+  [Instruction ::= (*) LEFT expropt , {TERM }]
+  [Instruction ::= (*) TURN expr , {TERM }]
+}
+transition on PEN to state [4]
+transition on GOTO to state [8]
+transition on UP to state [11]
+transition on CALL to state [9]
+transition on END to state [69]
+transition on FRAME to state [5]
+transition on DOWN to state [18]
+transition on ID to state [13]
+transition on TURN to state [17]
+transition on HOME to state [7]
+transition on RIGHT to state [14]
+transition on INK to state [12]
+transition on Instruction to state [42]
+transition on MOVE to state [20]
+transition on LEFT to state [15]
+transition on REPEAT to state [19]
+
+-------------------
+lalr_state [69]: {
+  [Declaration ::= DEFINE ID Instructions END (*) , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+
+-------------------
+lalr_state [70]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV SEP }]
+  [Instruction ::= FRAME expr (*) SEP expr , {TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV SEP }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV SEP }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+transition on SEP to state [71]
+
+-------------------
+lalr_state [71]: {
+  [expr ::= (*) ID , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr SUB expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= FRAME expr SEP (*) expr , {TERM }]
+  [expr ::= (*) NUMBER , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr DIV expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr ADD expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) expr MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= (*) OPEN_PARENTHESIS expr CLOSE_PARENTHESIS , {ADD SUB MULT DIV TERM }]
+}
+transition on expr to state [72]
+transition on OPEN_PARENTHESIS to state [25]
+transition on ADD to state [24]
+transition on NUMBER to state [23]
+transition on SUB to state [22]
+transition on ID to state [21]
+
+-------------------
+lalr_state [72]: {
+  [expr ::= expr (*) ADD expr , {ADD SUB MULT DIV TERM }]
+  [Instruction ::= FRAME expr SEP expr (*) , {TERM }]
+  [expr ::= expr (*) MULT expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) SUB expr , {ADD SUB MULT DIV TERM }]
+  [expr ::= expr (*) DIV expr , {ADD SUB MULT DIV TERM }]
+}
+transition on DIV to state [31]
+transition on ADD to state [30]
+transition on MULT to state [29]
+transition on SUB to state [28]
+
+-------------------
+lalr_state [73]: {
+  [Instruction ::= PEN ON (*) , {TERM }]
+}
+
+-------------------
+lalr_state [74]: {
+  [Instruction ::= PEN OFF (*) , {TERM }]
+}
+
+-------------------
+lalr_state [75]: {
+  [Definition ::= Instruction TERM (*) , {EOF ID FRAME HOME UP DOWN RIGHT LEFT PEN GOTO MOVE TURN CALL INK TERM REPEAT DEFINE }]
+}
+
+-------------------
+lalr_state [76]: {
+  [$START ::= Commandes EOF (*) , {EOF }]
+}
+
+-------------------
+-------- ACTION_TABLE --------
+From state #0
+ [term 0:REDUCE(with prod 2)] [term 3:REDUCE(with prod 2)]
+ [term 4:REDUCE(with prod 2)] [term 5:REDUCE(with prod 2)]
+ [term 6:REDUCE(with prod 2)] [term 7:REDUCE(with prod 2)]
+ [term 8:REDUCE(with prod 2)] [term 9:REDUCE(with prod 2)]
+ [term 10:REDUCE(with prod 2)] [term 11:REDUCE(with prod 2)]
+ [term 12:REDUCE(with prod 2)] [term 13:REDUCE(with prod 2)]
+ [term 16:REDUCE(with prod 2)] [term 21:REDUCE(with prod 2)]
+ [term 22:REDUCE(with prod 2)] [term 29:REDUCE(with prod 2)]
+ [term 31:REDUCE(with prod 2)]
+From state #1
+ [term 0:SHIFT(to state 76)]
+From state #2
+ [term 0:REDUCE(with prod 0)] [term 3:SHIFT(to state 13)]
+ [term 4:SHIFT(to state 5)] [term 5:SHIFT(to state 7)]
+ [term 6:SHIFT(to state 11)] [term 7:SHIFT(to state 18)]
+ [term 8:SHIFT(to state 14)] [term 9:SHIFT(to state 15)]
+ [term 10:SHIFT(to state 4)] [term 11:SHIFT(to state 8)]
+ [term 12:SHIFT(to state 20)] [term 13:SHIFT(to state 17)]
+ [term 16:SHIFT(to state 9)] [term 21:SHIFT(to state 12)]
+ [term 22:REDUCE(with prod 6)] [term 29:SHIFT(to state 19)]
+ [term 31:SHIFT(to state 6)]
+From state #3
+ [term 22:SHIFT(to state 75)]
+From state #4
+ [term 14:SHIFT(to state 73)] [term 15:SHIFT(to state 74)]
+From state #5
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #6
+ [term 3:SHIFT(to state 67)]
+From state #7
+ [term 22:REDUCE(with prod 8)]
+From state #8
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #9
+ [term 3:SHIFT(to state 58)]
+From state #10
+ [term 0:REDUCE(with prod 5)] [term 3:REDUCE(with prod 5)]
+ [term 4:REDUCE(with prod 5)] [term 5:REDUCE(with prod 5)]
+ [term 6:REDUCE(with prod 5)] [term 7:REDUCE(with prod 5)]
+ [term 8:REDUCE(with prod 5)] [term 9:REDUCE(with prod 5)]
+ [term 10:REDUCE(with prod 5)] [term 11:REDUCE(with prod 5)]
+ [term 12:REDUCE(with prod 5)] [term 13:REDUCE(with prod 5)]
+ [term 16:REDUCE(with prod 5)] [term 21:REDUCE(with prod 5)]
+ [term 22:REDUCE(with prod 5)] [term 29:REDUCE(with prod 5)]
+ [term 31:REDUCE(with prod 5)]
+From state #11
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 24)] [term 25:SHIFT(to state 25)]
+From state #12
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #13
+ [term 24:SHIFT(to state 49)]
+From state #14
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 24)] [term 25:SHIFT(to state 25)]
+From state #15
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 24)] [term 25:SHIFT(to state 25)]
+From state #16
+ [term 0:REDUCE(with prod 3)] [term 3:REDUCE(with prod 3)]
+ [term 4:REDUCE(with prod 3)] [term 5:REDUCE(with prod 3)]
+ [term 6:REDUCE(with prod 3)] [term 7:REDUCE(with prod 3)]
+ [term 8:REDUCE(with prod 3)] [term 9:REDUCE(with prod 3)]
+ [term 10:REDUCE(with prod 3)] [term 11:REDUCE(with prod 3)]
+ [term 12:REDUCE(with prod 3)] [term 13:REDUCE(with prod 3)]
+ [term 16:REDUCE(with prod 3)] [term 21:REDUCE(with prod 3)]
+ [term 22:REDUCE(with prod 3)] [term 29:REDUCE(with prod 3)]
+ [term 31:REDUCE(with prod 3)]
+From state #17
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #18
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 24)] [term 25:SHIFT(to state 25)]
+From state #19
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #20
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 24)] [term 25:SHIFT(to state 25)]
+From state #21
+ [term 3:REDUCE(with prod 34)] [term 4:REDUCE(with prod 34)]
+ [term 5:REDUCE(with prod 34)] [term 6:REDUCE(with prod 34)]
+ [term 7:REDUCE(with prod 34)] [term 8:REDUCE(with prod 34)]
+ [term 9:REDUCE(with prod 34)] [term 10:REDUCE(with prod 34)]
+ [term 11:REDUCE(with prod 34)] [term 12:REDUCE(with prod 34)]
+ [term 13:REDUCE(with prod 34)] [term 16:REDUCE(with prod 34)]
+ [term 17:REDUCE(with prod 34)] [term 18:REDUCE(with prod 34)]
+ [term 19:REDUCE(with prod 34)] [term 20:REDUCE(with prod 34)]
+ [term 21:REDUCE(with prod 34)] [term 22:REDUCE(with prod 34)]
+ [term 23:REDUCE(with prod 34)] [term 26:REDUCE(with prod 34)]
+ [term 29:REDUCE(with prod 34)] [term 30:REDUCE(with prod 34)]
+From state #22
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #23
+ [term 3:REDUCE(with prod 33)] [term 4:REDUCE(with prod 33)]
+ [term 5:REDUCE(with prod 33)] [term 6:REDUCE(with prod 33)]
+ [term 7:REDUCE(with prod 33)] [term 8:REDUCE(with prod 33)]
+ [term 9:REDUCE(with prod 33)] [term 10:REDUCE(with prod 33)]
+ [term 11:REDUCE(with prod 33)] [term 12:REDUCE(with prod 33)]
+ [term 13:REDUCE(with prod 33)] [term 16:REDUCE(with prod 33)]
+ [term 17:REDUCE(with prod 33)] [term 18:REDUCE(with prod 33)]
+ [term 19:REDUCE(with prod 33)] [term 20:REDUCE(with prod 33)]
+ [term 21:REDUCE(with prod 33)] [term 22:REDUCE(with prod 33)]
+ [term 23:REDUCE(with prod 33)] [term 26:REDUCE(with prod 33)]
+ [term 29:REDUCE(with prod 33)] [term 30:REDUCE(with prod 33)]
+From state #24
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #25
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #26
+ [term 22:REDUCE(with prod 16)]
+From state #27
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 25)]
+From state #28
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #29
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #30
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #31
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #32
+ [term 3:REDUCE(with prod 30)] [term 4:REDUCE(with prod 30)]
+ [term 5:REDUCE(with prod 30)] [term 6:REDUCE(with prod 30)]
+ [term 7:REDUCE(with prod 30)] [term 8:REDUCE(with prod 30)]
+ [term 9:REDUCE(with prod 30)] [term 10:REDUCE(with prod 30)]
+ [term 11:REDUCE(with prod 30)] [term 12:REDUCE(with prod 30)]
+ [term 13:REDUCE(with prod 30)] [term 16:REDUCE(with prod 30)]
+ [term 17:REDUCE(with prod 30)] [term 18:REDUCE(with prod 30)]
+ [term 19:REDUCE(with prod 30)] [term 20:REDUCE(with prod 30)]
+ [term 21:REDUCE(with prod 30)] [term 22:REDUCE(with prod 30)]
+ [term 23:REDUCE(with prod 30)] [term 26:REDUCE(with prod 30)]
+ [term 29:REDUCE(with prod 30)] [term 30:REDUCE(with prod 30)]
+From state #33
+ [term 3:REDUCE(with prod 27)] [term 4:REDUCE(with prod 27)]
+ [term 5:REDUCE(with prod 27)] [term 6:REDUCE(with prod 27)]
+ [term 7:REDUCE(with prod 27)] [term 8:REDUCE(with prod 27)]
+ [term 9:REDUCE(with prod 27)] [term 10:REDUCE(with prod 27)]
+ [term 11:REDUCE(with prod 27)] [term 12:REDUCE(with prod 27)]
+ [term 13:REDUCE(with prod 27)] [term 16:REDUCE(with prod 27)]
+ [term 17:REDUCE(with prod 27)] [term 18:REDUCE(with prod 27)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 21:REDUCE(with prod 27)] [term 22:REDUCE(with prod 27)]
+ [term 23:REDUCE(with prod 27)] [term 26:REDUCE(with prod 27)]
+ [term 29:REDUCE(with prod 27)] [term 30:REDUCE(with prod 27)]
+From state #34
+ [term 3:REDUCE(with prod 29)] [term 4:REDUCE(with prod 29)]
+ [term 5:REDUCE(with prod 29)] [term 6:REDUCE(with prod 29)]
+ [term 7:REDUCE(with prod 29)] [term 8:REDUCE(with prod 29)]
+ [term 9:REDUCE(with prod 29)] [term 10:REDUCE(with prod 29)]
+ [term 11:REDUCE(with prod 29)] [term 12:REDUCE(with prod 29)]
+ [term 13:REDUCE(with prod 29)] [term 16:REDUCE(with prod 29)]
+ [term 17:REDUCE(with prod 29)] [term 18:REDUCE(with prod 29)]
+ [term 19:REDUCE(with prod 29)] [term 20:REDUCE(with prod 29)]
+ [term 21:REDUCE(with prod 29)] [term 22:REDUCE(with prod 29)]
+ [term 23:REDUCE(with prod 29)] [term 26:REDUCE(with prod 29)]
+ [term 29:REDUCE(with prod 29)] [term 30:REDUCE(with prod 29)]
+From state #35
+ [term 3:REDUCE(with prod 28)] [term 4:REDUCE(with prod 28)]
+ [term 5:REDUCE(with prod 28)] [term 6:REDUCE(with prod 28)]
+ [term 7:REDUCE(with prod 28)] [term 8:REDUCE(with prod 28)]
+ [term 9:REDUCE(with prod 28)] [term 10:REDUCE(with prod 28)]
+ [term 11:REDUCE(with prod 28)] [term 12:REDUCE(with prod 28)]
+ [term 13:REDUCE(with prod 28)] [term 16:REDUCE(with prod 28)]
+ [term 17:REDUCE(with prod 28)] [term 18:REDUCE(with prod 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 21:REDUCE(with prod 28)] [term 22:REDUCE(with prod 28)]
+ [term 23:REDUCE(with prod 28)] [term 26:REDUCE(with prod 28)]
+ [term 29:REDUCE(with prod 28)] [term 30:REDUCE(with prod 28)]
+From state #36
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 26:SHIFT(to state 37)]
+From state #37
+ [term 3:REDUCE(with prod 26)] [term 4:REDUCE(with prod 26)]
+ [term 5:REDUCE(with prod 26)] [term 6:REDUCE(with prod 26)]
+ [term 7:REDUCE(with prod 26)] [term 8:REDUCE(with prod 26)]
+ [term 9:REDUCE(with prod 26)] [term 10:REDUCE(with prod 26)]
+ [term 11:REDUCE(with prod 26)] [term 12:REDUCE(with prod 26)]
+ [term 13:REDUCE(with prod 26)] [term 16:REDUCE(with prod 26)]
+ [term 17:REDUCE(with prod 26)] [term 18:REDUCE(with prod 26)]
+ [term 19:REDUCE(with prod 26)] [term 20:REDUCE(with prod 26)]
+ [term 21:REDUCE(with prod 26)] [term 22:REDUCE(with prod 26)]
+ [term 23:REDUCE(with prod 26)] [term 26:REDUCE(with prod 26)]
+ [term 29:REDUCE(with prod 26)] [term 30:REDUCE(with prod 26)]
+From state #38
+ [term 3:REDUCE(with prod 31)] [term 4:REDUCE(with prod 31)]
+ [term 5:REDUCE(with prod 31)] [term 6:REDUCE(with prod 31)]
+ [term 7:REDUCE(with prod 31)] [term 8:REDUCE(with prod 31)]
+ [term 9:REDUCE(with prod 31)] [term 10:REDUCE(with prod 31)]
+ [term 11:REDUCE(with prod 31)] [term 12:REDUCE(with prod 31)]
+ [term 13:REDUCE(with prod 31)] [term 16:REDUCE(with prod 31)]
+ [term 17:REDUCE(with prod 31)] [term 18:REDUCE(with prod 31)]
+ [term 19:REDUCE(with prod 31)] [term 20:REDUCE(with prod 31)]
+ [term 21:REDUCE(with prod 31)] [term 22:REDUCE(with prod 31)]
+ [term 23:REDUCE(with prod 31)] [term 26:REDUCE(with prod 31)]
+ [term 29:REDUCE(with prod 31)] [term 30:REDUCE(with prod 31)]
+From state #39
+ [term 3:REDUCE(with prod 32)] [term 4:REDUCE(with prod 32)]
+ [term 5:REDUCE(with prod 32)] [term 6:REDUCE(with prod 32)]
+ [term 7:REDUCE(with prod 32)] [term 8:REDUCE(with prod 32)]
+ [term 9:REDUCE(with prod 32)] [term 10:REDUCE(with prod 32)]
+ [term 11:REDUCE(with prod 32)] [term 12:REDUCE(with prod 32)]
+ [term 13:REDUCE(with prod 32)] [term 16:REDUCE(with prod 32)]
+ [term 17:REDUCE(with prod 32)] [term 18:REDUCE(with prod 32)]
+ [term 19:REDUCE(with prod 32)] [term 20:REDUCE(with prod 32)]
+ [term 21:REDUCE(with prod 32)] [term 22:REDUCE(with prod 32)]
+ [term 23:REDUCE(with prod 32)] [term 26:REDUCE(with prod 32)]
+ [term 29:REDUCE(with prod 32)] [term 30:REDUCE(with prod 32)]
+From state #40
+ [term 3:REDUCE(with prod 22)] [term 4:REDUCE(with prod 22)]
+ [term 5:REDUCE(with prod 22)] [term 6:REDUCE(with prod 22)]
+ [term 7:REDUCE(with prod 22)] [term 8:REDUCE(with prod 22)]
+ [term 9:REDUCE(with prod 22)] [term 10:REDUCE(with prod 22)]
+ [term 11:REDUCE(with prod 22)] [term 12:REDUCE(with prod 22)]
+ [term 13:REDUCE(with prod 22)] [term 16:REDUCE(with prod 22)]
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 21:REDUCE(with prod 22)] [term 22:REDUCE(with prod 22)]
+ [term 29:REDUCE(with prod 22)] [term 30:REDUCE(with prod 22)]
+From state #41
+ [term 3:SHIFT(to state 13)] [term 4:SHIFT(to state 5)]
+ [term 5:SHIFT(to state 7)] [term 6:SHIFT(to state 11)]
+ [term 7:SHIFT(to state 18)] [term 8:SHIFT(to state 14)]
+ [term 9:SHIFT(to state 15)] [term 10:SHIFT(to state 4)]
+ [term 11:SHIFT(to state 8)] [term 12:SHIFT(to state 20)]
+ [term 13:SHIFT(to state 17)] [term 16:SHIFT(to state 9)]
+ [term 21:SHIFT(to state 12)] [term 22:REDUCE(with prod 6)]
+ [term 29:SHIFT(to state 19)] [term 30:SHIFT(to state 43)]
+From state #42
+ [term 22:SHIFT(to state 44)]
+From state #43
+ [term 22:REDUCE(with prod 20)]
+From state #44
+ [term 3:REDUCE(with prod 23)] [term 4:REDUCE(with prod 23)]
+ [term 5:REDUCE(with prod 23)] [term 6:REDUCE(with prod 23)]
+ [term 7:REDUCE(with prod 23)] [term 8:REDUCE(with prod 23)]
+ [term 9:REDUCE(with prod 23)] [term 10:REDUCE(with prod 23)]
+ [term 11:REDUCE(with prod 23)] [term 12:REDUCE(with prod 23)]
+ [term 13:REDUCE(with prod 23)] [term 16:REDUCE(with prod 23)]
+ [term 21:REDUCE(with prod 23)] [term 22:REDUCE(with prod 23)]
+ [term 29:REDUCE(with prod 23)] [term 30:REDUCE(with prod 23)]
+From state #45
+ [term 22:REDUCE(with prod 10)]
+From state #46
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 17)]
+From state #47
+ [term 22:REDUCE(with prod 12)]
+From state #48
+ [term 22:REDUCE(with prod 11)]
+From state #49
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #50
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 18)]
+From state #51
+ [term 22:REDUCE(with prod 19)]
+From state #52
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 36)] [term 23:SHIFT(to state 53)]
+From state #53
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #54
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 23:SHIFT(to state 55)]
+From state #55
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #56
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 35)]
+From state #57
+ [term 22:REDUCE(with prod 9)]
+From state #58
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 22:REDUCE(with prod 37)] [term 25:SHIFT(to state 25)]
+From state #59
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 39)] [term 23:REDUCE(with prod 39)]
+From state #60
+ [term 22:REDUCE(with prod 21)]
+From state #61
+ [term 22:REDUCE(with prod 38)] [term 23:SHIFT(to state 62)]
+From state #62
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #63
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 40)] [term 23:REDUCE(with prod 40)]
+From state #64
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 23:SHIFT(to state 65)]
+From state #65
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #66
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 15)]
+From state #67
+ [term 3:REDUCE(with prod 22)] [term 4:REDUCE(with prod 22)]
+ [term 5:REDUCE(with prod 22)] [term 6:REDUCE(with prod 22)]
+ [term 7:REDUCE(with prod 22)] [term 8:REDUCE(with prod 22)]
+ [term 9:REDUCE(with prod 22)] [term 10:REDUCE(with prod 22)]
+ [term 11:REDUCE(with prod 22)] [term 12:REDUCE(with prod 22)]
+ [term 13:REDUCE(with prod 22)] [term 16:REDUCE(with prod 22)]
+ [term 21:REDUCE(with prod 22)] [term 22:REDUCE(with prod 22)]
+ [term 29:REDUCE(with prod 22)] [term 30:REDUCE(with prod 22)]
+From state #68
+ [term 3:SHIFT(to state 13)] [term 4:SHIFT(to state 5)]
+ [term 5:SHIFT(to state 7)] [term 6:SHIFT(to state 11)]
+ [term 7:SHIFT(to state 18)] [term 8:SHIFT(to state 14)]
+ [term 9:SHIFT(to state 15)] [term 10:SHIFT(to state 4)]
+ [term 11:SHIFT(to state 8)] [term 12:SHIFT(to state 20)]
+ [term 13:SHIFT(to state 17)] [term 16:SHIFT(to state 9)]
+ [term 21:SHIFT(to state 12)] [term 22:REDUCE(with prod 6)]
+ [term 29:SHIFT(to state 19)] [term 30:SHIFT(to state 69)]
+From state #69
+ [term 0:REDUCE(with prod 41)] [term 3:REDUCE(with prod 41)]
+ [term 4:REDUCE(with prod 41)] [term 5:REDUCE(with prod 41)]
+ [term 6:REDUCE(with prod 41)] [term 7:REDUCE(with prod 41)]
+ [term 8:REDUCE(with prod 41)] [term 9:REDUCE(with prod 41)]
+ [term 10:REDUCE(with prod 41)] [term 11:REDUCE(with prod 41)]
+ [term 12:REDUCE(with prod 41)] [term 13:REDUCE(with prod 41)]
+ [term 16:REDUCE(with prod 41)] [term 21:REDUCE(with prod 41)]
+ [term 22:REDUCE(with prod 41)] [term 29:REDUCE(with prod 41)]
+ [term 31:REDUCE(with prod 41)]
+From state #70
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 23:SHIFT(to state 71)]
+From state #71
+ [term 2:SHIFT(to state 23)] [term 3:SHIFT(to state 21)]
+ [term 17:SHIFT(to state 24)] [term 18:SHIFT(to state 22)]
+ [term 25:SHIFT(to state 25)]
+From state #72
+ [term 17:SHIFT(to state 30)] [term 18:SHIFT(to state 28)]
+ [term 19:SHIFT(to state 29)] [term 20:SHIFT(to state 31)]
+ [term 22:REDUCE(with prod 7)]
+From state #73
+ [term 22:REDUCE(with prod 14)]
+From state #74
+ [term 22:REDUCE(with prod 13)]
+From state #75
+ [term 0:REDUCE(with prod 4)] [term 3:REDUCE(with prod 4)]
+ [term 4:REDUCE(with prod 4)] [term 5:REDUCE(with prod 4)]
+ [term 6:REDUCE(with prod 4)] [term 7:REDUCE(with prod 4)]
+ [term 8:REDUCE(with prod 4)] [term 9:REDUCE(with prod 4)]
+ [term 10:REDUCE(with prod 4)] [term 11:REDUCE(with prod 4)]
+ [term 12:REDUCE(with prod 4)] [term 13:REDUCE(with prod 4)]
+ [term 16:REDUCE(with prod 4)] [term 21:REDUCE(with prod 4)]
+ [term 22:REDUCE(with prod 4)] [term 29:REDUCE(with prod 4)]
+ [term 31:REDUCE(with prod 4)]
+From state #76
+ [term 0:REDUCE(with prod 1)]
+------------------------------
+-------- REDUCE_TABLE --------
+From state #0
+ [non term 0->state 1] [non term 1->state 2]
+From state #1
+From state #2
+ [non term 2->state 16] [non term 4->state 3] [non term 11->state 10]
+From state #3
+From state #4
+From state #5
+ [non term 6->state 70]
+From state #6
+From state #7
+From state #8
+ [non term 6->state 64]
+From state #9
+From state #10
+From state #11
+ [non term 6->state 27] [non term 7->state 57]
+From state #12
+ [non term 5->state 51] [non term 6->state 52]
+From state #13
+From state #14
+ [non term 6->state 27] [non term 7->state 48]
+From state #15
+ [non term 6->state 27] [non term 7->state 47]
+From state #16
+From state #17
+ [non term 6->state 46]
+From state #18
+ [non term 6->state 27] [non term 7->state 45]
+From state #19
+ [non term 6->state 40]
+From state #20
+ [non term 6->state 27] [non term 7->state 26]
+From state #21
+From state #22
+ [non term 6->state 39]
+From state #23
+From state #24
+ [non term 6->state 38]
+From state #25
+ [non term 6->state 36]
+From state #26
+From state #27
+From state #28
+ [non term 6->state 35]
+From state #29
+ [non term 6->state 34]
+From state #30
+ [non term 6->state 33]
+From state #31
+ [non term 6->state 32]
+From state #32
+From state #33
+From state #34
+From state #35
+From state #36
+From state #37
+From state #38
+From state #39
+From state #40
+ [non term 3->state 41]
+From state #41
+ [non term 4->state 42]
+From state #42
+From state #43
+From state #44
+From state #45
+From state #46
+From state #47
+From state #48
+From state #49
+ [non term 6->state 50]
+From state #50
+From state #51
+From state #52
+From state #53
+ [non term 6->state 54]
+From state #54
+From state #55
+ [non term 6->state 56]
+From state #56
+From state #57
+From state #58
+ [non term 6->state 59] [non term 8->state 61] [non term 9->state 60]
+From state #59
+From state #60
+From state #61
+From state #62
+ [non term 6->state 63]
+From state #63
+From state #64
+From state #65
+ [non term 6->state 66]
+From state #66
+From state #67
+ [non term 3->state 68]
+From state #68
+ [non term 4->state 42]
+From state #69
+From state #70
+From state #71
+ [non term 6->state 72]
+From state #72
+From state #73
+From state #74
+From state #75
+From state #76
+-----------------------------

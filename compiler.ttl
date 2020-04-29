@@ -1,0 +1,62 @@
+frame 600, 400;
+
+red=255*65536;
+green=255*256;
+blue=255;
+yellow= red+green;
+magenta= red+blue;
+cyan= green+blue;
+
+pen off;
+goto 100, 150;
+pen on;
+up 100;
+left 75;
+down 50;
+right 25;
+
+pen off;
+goto 500, 300;
+pen on;
+move 50; turn 90;
+move 50; turn 90;
+move 50; turn 90;
+move 50; turn 90;
+
+pen off;
+goto 100, 200;
+pen on;
+
+pen off;
+goto 200, 100;
+pen on;
+
+pen off;
+goto 500, 50;
+pen on;
+a=360/20; l=20;
+
+pen off;
+goto 300, 300;
+pen on;
+a=20; c=2; l=0; turn 180;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
+l=l+c; move l; turn a;
